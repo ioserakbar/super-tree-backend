@@ -88,7 +88,7 @@ router.post("/addSpecies", asyncHandler(
 
 
         const species = await SpeciesModel.find({binomialNomenclature})
-        if(!species){
+        if(species.length > 0){
             res.status(HTTP_BAD_REQUEST)
             .send("Species already in database")
             return

@@ -43,7 +43,8 @@ router.post("/addClade", asyncHandler(
 
 
         const clade = await CladeModel.find({name})
-        if(!clade){
+        console.log(clade)
+        if(clade.length > 0){
             res.status(HTTP_BAD_REQUEST)
             .send("Clade already in database")
             return
