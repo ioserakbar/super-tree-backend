@@ -1,28 +1,26 @@
+import dotenv from 'dotenv'
+dotenv.config();
 import express from "express"
 import cors from "cors"
-import { sample_Species, sapmle_Clades } from "./data";
-
+import cladeRouter from "./router/clade.router"
+import speciesRouter from "./router/species.router"
+import { dbConnect } from './configs/database.config';
+dbConnect();
 const app = express();
+const bodyParser = require('body-parser')
+
 app.use(cors({
     credentials: true,
     origin:["http://localhost:4200"]
 }))
 
-app.get("/api/species", (req, res) => {
-    res.send(sample_Species)
-})
+app.use(express.json())
+app.use(bodyParser.json())
 
-app.get("/api/clades", (req, res) => {
-    res.send(sapmle_Clades)
-})
+app.use("/api/clades", cladeRouter)
+app.use("/api/species", speciesRouter)
 
-app.get("/api/clades/search/:searchTerm", (req, res) => {
-    const searchTerm = req.params.searchTerm
-    const clades = sapmle_Clades.filter(clade => clade.name.toLowerCase().includes(searchTerm.toLocaleLowerCase()));
-    res.send(clades)
-})
-
-const port = 5000
+const port = 5001
 
 app.listen(port, () => {
     console.log("Website served on http://localhost:" + port)

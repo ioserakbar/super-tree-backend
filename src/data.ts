@@ -1,13 +1,16 @@
 import {v4 as uuidv4} from 'uuid';
+import { Species } from './models/species.model';
 
 var tricerId = 'db0c2d5d-a678-47d1-8e2b-ca07dbc9de67'
 var trexId = '5d4eaf71-7382-4120-baf8-a27063e41929'
 var diplodocusId = '7a1e0386-f4ba-4892-a78f-c154e932d0e5'
 var megaloId = '1d0bece2-4120-4892-a78f-ca07dbc9de67'
 
-export const sample_Species: any[] = [
+var tricerSpeciesId = '509410cf-b52b-4dc1-a777-6e35e2ffc01f'
+
+export const sample_Species: Species[] = [
     {
-        id: uuidv4(), 
+        id: tricerSpeciesId, 
         binomialNomenclature:  "Triceratops horridus", 
         genus: tricerId
     },
@@ -41,6 +44,7 @@ export const sapmle_Clades: any[] = [
     {
         id: DinosauriaId,
         name: "Dinosauria", 
+        tier: 0,
         parentClade: uuidv4(),
         isFirst: true, 
         drawHelper:{
@@ -55,6 +59,7 @@ export const sapmle_Clades: any[] = [
     {
         id: OrnithischiaId,
         name: "Ornithischia", 
+        tier: 1,
         parentClade: DinosauriaId,
         isFirst: false, 
         drawHelper:{
@@ -69,6 +74,7 @@ export const sapmle_Clades: any[] = [
     {
         id: tricerId,
         name: "Triceratops", 
+        tier: 2,
         parentClade: OrnithischiaId,
         isFirst: false, 
         drawHelper:{
@@ -83,6 +89,7 @@ export const sapmle_Clades: any[] = [
     {
         id: SaurischiaId,
         name: "Saurischia", 
+        tier: 1,
         parentClade: DinosauriaId,
         isFirst: false, 
         drawHelper:{
@@ -97,6 +104,7 @@ export const sapmle_Clades: any[] = [
     {
         id: TheropodaId,
         name: "Theropoda", 
+        tier: 2,
         parentClade: SaurischiaId,
         isFirst: false, drawHelper:{
             coords:{
@@ -109,7 +117,8 @@ export const sapmle_Clades: any[] = [
     },
     {
         id: MegalosauroideaId,
-        name: "Megalosauroidea", 
+        name: "Megalosauroidea",
+        tier: 3, 
         parentClade: TheropodaId,
         isFirst: false, 
         drawHelper:{
@@ -124,6 +133,7 @@ export const sapmle_Clades: any[] = [
     {
         id: megaloId,
         name: "Megalosaurus", 
+        tier: 4,
         parentClade: MegalosauroideaId,
         isFirst: false, 
         drawHelper:{
@@ -138,6 +148,7 @@ export const sapmle_Clades: any[] = [
     {
         id: CoelurosauriaId,
         name: "Coelurosauria", 
+        tier: 3,
         parentClade: TheropodaId,
         isFirst: false, 
         drawHelper:{
@@ -152,6 +163,7 @@ export const sapmle_Clades: any[] = [
     {
         id: trexId,
         name: "Tyrannosaurus", 
+        tier: 4,
         parentClade: CoelurosauriaId,
         isFirst: false, 
         drawHelper:{
@@ -166,6 +178,7 @@ export const sapmle_Clades: any[] = [
     {
         id: SauropodomorphaId,
         name: "Sauropodomorpha", 
+        tier: 2,
         parentClade: SaurischiaId,
         isFirst: false, 
         drawHelper:{
@@ -180,6 +193,7 @@ export const sapmle_Clades: any[] = [
     {
         id: diplodocusId,
         name: "Diplodocus", 
+        tier: 3,
         parentClade: SauropodomorphaId,
         isFirst: false, 
         drawHelper:{
