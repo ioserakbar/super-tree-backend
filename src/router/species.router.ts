@@ -22,9 +22,12 @@ router.get("/seed", asyncHandler(
     }
 ))
 
-router.get("/", (req, res) => {
-    res.send(sample_Species)
-})
+router.get("/", asyncHandler(
+    async (req, res) => {
+        const species = await SpeciesModel.find();
+        res.send(species)
+    }
+))
 
 router.get("/getFamily/:species", (req, res) => {
 

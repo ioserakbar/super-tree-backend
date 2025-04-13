@@ -5,8 +5,8 @@ export interface Clade{
     name: string
     parentClade: string
     description: string
-    isFirst: boolean
-    drawHelper: {
+    isFirst?: boolean
+    drawHelper?: {
         coords:{
             angle: number,
             distance: number
@@ -14,7 +14,8 @@ export interface Clade{
         totalSons: number
         arcOrientation: boolean
     }
-    tier:number
+    tier?:number,
+    directSons?: [string]
 }
 
 
@@ -26,13 +27,14 @@ export const SpeciesShcema = new Schema<Clade>(
         isFirst: {type: Boolean, required: true},
         drawHelper: {
             coords:{
-                angle: {type: Number, required: true},
-                distance: {type: Number, required: true},
+                angle: {type: Number},
+                distance: {type: Number},
             },
-            totalSons: {type: Number, required: true},
-            arcOrientation: {type: Boolean, required: true}
+            totalSons: {type: Number},
+            arcOrientation: {type: Boolean}
         },
         tier: {type: Number, required: true},
+        directSons: {type:[String], required: false}
     },{
         toJSON:{
             virtuals: true

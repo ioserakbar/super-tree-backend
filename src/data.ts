@@ -1,5 +1,6 @@
 import {v4 as uuidv4} from 'uuid';
 import { Species } from './models/species.model';
+import { Clade } from './models/clades.model';
 
 var tricerId = 'db0c2d5d-a678-47d1-8e2b-ca07dbc9de67'
 var trexId = '5d4eaf71-7382-4120-baf8-a27063e41929'
@@ -45,6 +46,7 @@ export const sapmle_Clades: any[] = [
         id: DinosauriaId,
         name: "Dinosauria", 
         tier: 0,
+        description: "",
         parentClade: uuidv4(),
         isFirst: true, 
         drawHelper:{
@@ -54,7 +56,11 @@ export const sapmle_Clades: any[] = [
             }, 
             totalSons: 10, 
             arcOrientation: false
-        }
+        },
+        directSons: [
+            OrnithischiaId,
+            SaurischiaId
+        ]
     },
     {
         id: OrnithischiaId,
@@ -69,7 +75,10 @@ export const sapmle_Clades: any[] = [
             }, 
             totalSons: 1, 
             arcOrientation: true
-        }
+        },
+        directSons: [
+            tricerId,
+        ]
     },
     {
         id: tricerId,
@@ -99,7 +108,11 @@ export const sapmle_Clades: any[] = [
             }, 
             totalSons: 7, 
             arcOrientation: false
-        }
+        },
+        directSons: [
+            TheropodaId,
+            SauropodomorphaId
+        ]
     },
     {
         id: TheropodaId,
@@ -113,7 +126,11 @@ export const sapmle_Clades: any[] = [
             }, 
             totalSons: 4, 
             arcOrientation: false
-        }
+        },
+        directSons: [
+            CoelurosauriaId,
+            MegalosauroideaId
+        ]
     },
     {
         id: MegalosauroideaId,
@@ -128,7 +145,10 @@ export const sapmle_Clades: any[] = [
             }, 
             totalSons: 1, 
             arcOrientation: false
-        }
+        },
+        directSons: [
+            megaloId
+        ]
     },
     {
         id: megaloId,
@@ -158,7 +178,10 @@ export const sapmle_Clades: any[] = [
             }, 
             totalSons: 1, 
             arcOrientation: true
-        }
+        },
+        directSons: [
+            trexId
+        ]
     },
     {
         id: trexId,
@@ -188,7 +211,10 @@ export const sapmle_Clades: any[] = [
             }, 
             totalSons: 1, 
             arcOrientation: true
-        }
+        },
+        directSons: [
+            diplodocusId
+        ]
     },
     {
         id: diplodocusId,

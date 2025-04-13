@@ -13,10 +13,9 @@ router.get("/seed", asyncHandler(
             res.send("Seed is already done");
             return;
         }
-        res.send(sapmle_Clades)
 
         await CladeModel.create(sapmle_Clades)
-        res.send("Seed is already done");
+        res.send(sapmle_Clades)
     }
 ))
 
@@ -54,17 +53,7 @@ router.post("/addClade", asyncHandler(
             id:'',
             name, 
             parentClade, 
-            description, 
-            isFirst: false,
-            drawHelper: {
-                arcOrientation: false,
-                coords: {
-                    distance: 0,
-                    angle: 0
-                },
-                totalSons: 0
-            },
-            tier: 0
+            description
         }
 
         const dbSpecies = await CladeModel.create(newClade);
