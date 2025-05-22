@@ -22,6 +22,8 @@ router.get("/seed", asyncHandler(
 router.get("/", asyncHandler(
     async (req, res) => {
         const clades = await CladeModel.find();
+        console.log(clades)
+
         res.send(clades)
     }
 ))
