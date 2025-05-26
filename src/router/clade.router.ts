@@ -85,7 +85,6 @@ router.post("/clearData", asyncHandler(
 
         await CladeModel.updateMany({}, resetedData)
         res.send("Data reseted succesfully")
-
     }   
 ))
 
@@ -117,7 +116,6 @@ router.post("/calculateData", asyncHandler(
                 }
             })
         });
-
     }   
 ))
 
