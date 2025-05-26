@@ -1,6 +1,6 @@
 
 import { Router } from "express"
-import { sapmle_Clades, sample_Species } from "../data";
+import { sample_Clades, sample_Species } from "../data";
 import asyncHandler from "express-async-handler";
 import { Species, SpeciesModel } from "../models/species.model";
 import { HTTP_BAD_REQUEST } from "../constants/http_status";
@@ -54,8 +54,8 @@ router.get("/getFamily/:species", (req, res) => {
     }
     var family: any[] = []
 
-    var clades = sapmle_Clades;
-    var currentCladeId = sapmle_Clades.find(x => x.id == species.genus)?.id;
+    var clades = sample_Clades;
+    var currentCladeId = sample_Clades.find(x => x.id == species.genus)?.id;
     if(currentCladeId === undefined){
         console.error(species.binomialNomenclature + " genus (id: " + species.genus + ") not found")
     }

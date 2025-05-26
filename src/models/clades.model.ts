@@ -15,14 +15,14 @@ export interface Clade{
         arcOrientation: boolean
     }
     tier?:number,
-    directSons?: [string]
+    directSons?: string[]
 }
 
 
 export const SpeciesShcema = new Schema<Clade>(
     {
         name: {type: String, required: true},
-        parentClade: {type: String, required: true},
+        parentClade: {type: String, required: false},
         description: {type: String},
         isFirst: {type: Boolean, required: true},
         drawHelper: {
