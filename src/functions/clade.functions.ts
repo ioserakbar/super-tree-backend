@@ -40,22 +40,34 @@ export function CalculateCladeDynamicData(pAllClades: Clade[]) : Clade[]{
     //  Dinosauria s the first one of the array, and the one next to it is the children that has more children itself. Once we finished with the branch of Saurisquia qe then add the branch of Ornisquia
     //
 
-    
-
     allClades = pAllClades
     genusIndex = 0;
 
     var rootCladeId = allClades.find(c => c.id == idOfRoot)!.id
 
     getTotalSonsAndTierOfClades(rootCladeId)
-    sortedClades = orderTestData(rootCladeId)
+    sortedClades = orderCladesAndChildren(rootCladeId)
     calculateCoordinates()
 
     return sortedClades
 
 }
 
-function orderTestData(cladeId: string, sortedClades: Clade[] = []) : Clade[]{
+export function getOrderedClades(baseCladeArray: Clade[], rootClade: String, tmpArray: Clade[] = []){
+
+    var clade = baseCladeArray.find(c => c.id == rootClade)!
+
+    tmpArray.push(clade)
+
+    clade.directSons?.forEach(son => {
+        getOrderedClades(baseCladeArray, son, tmpArray)
+    });
+
+    return tmpArray
+}
+
+
+function orderCladesAndChildren(cladeId: string, sortedClades: Clade[] = []) : Clade[]{
 
     var clade = allClades.find(c => c.id == cladeId)!
     sortedClades.push(clade)
@@ -105,12 +117,12 @@ function orderTestData(cladeId: string, sortedClades: Clade[] = []) : Clade[]{
 
     // Setting to true the children caldes that got more sons, if they have siblings
     if (clade.directSons!.length > 1) {
-        allClades.find(c => c.id == clade.directSons!.at(-1))!.drawHelper!.arcOrientation = true;
+        allClades.find(c => c.id == clade.directSons!.at(-1))!.drawHelper!.arcOrientation = false;
 
     }
 
     clade.directSons?.forEach(son => {
-        orderTestData(son, sortedClades)
+        orderCladesAndChildren(son, sortedClades)
     });
 
     return sortedClades
@@ -154,7 +166,7 @@ function getCoordinatesOfClade(cladeId: string, cladeWidth: number) {
     if (clade.directSons?.length == 0) { // Tip of the branch
         var angle = cladeWidth * genusIndex
         clade.drawHelper!.coords.angle = angle
-        clade.drawHelper!.coords.distance = 400
+        clade.drawHelper!.coords.distance = clade.tier! * 100;
         genusIndex++
 
     } else {

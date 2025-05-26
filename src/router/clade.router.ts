@@ -3,7 +3,7 @@ import { sample_Species, sample_Clades } from "../data";
 import asyncHandler from "express-async-handler";
 import { Clade, CladeModel } from "../models/clades.model";
 import { HTTP_BAD_REQUEST } from "../constants/http_status";
-import { CalculateCladeDynamicData } from "../functions/clade.functions";
+import { CalculateCladeDynamicData, getOrderedClades } from "../functions/clade.functions";
 
 const router = Router();
 
@@ -22,10 +22,13 @@ router.get("/seed", asyncHandler(
 
 router.get("/", asyncHandler(
     async (req, res) => {
-        const clades = await CladeModel.find();
-        console.log(clades)
 
-        res.send(clades)
+        const allClades = await CladeModel.find();
+        const rootClade = await allClades.find(c => c.name == "Dinosauria");
+
+        var orderedClades = getOrderedClades(allClades, rootClade!.id)
+
+        res.send(orderedClades)
     }
 ))
 
@@ -41,7 +44,7 @@ router.get("/search/:searchTerm", asyncHandler(
 
 router.post("/addClade", asyncHandler(
     async (req, res) => {
-        const{ name, parentClade, description } = req.body
+        const{ name, parentClade, description, tier, isFirst} = req.body
 
         const clade = await CladeModel.find({name})
         
@@ -51,14 +54,24 @@ router.post("/addClade", asyncHandler(
             return
         }
 
-        const newClade: Clade ={
+        const newCladeInfo: Clade ={
             id:'',
             name, 
             parentClade, 
-            description
+            description, 
+            tier, 
+            isFirst
         }
 
-        const dbSpecies = await CladeModel.create(newClade);
+        const newClade = await CladeModel.create(newCladeInfo);
+
+
+        //We add it to the directSons array of the parent
+        const parentCladeObject = await CladeModel.findOne({name: parentClade})
+
+        parentCladeObject?.directSons?.push(newClade.id)
+
+        await parentCladeObject?.save()
         res.send("Clade added to database")
     }
 ))
@@ -75,7 +88,7 @@ router.post("/clearData", asyncHandler(
         const resetedData =  {
             $set: {
                 drawHelper:{
-                    arcOrientation: false,
+                    arcOrientation: true,
                     coords: {angle: 0, distance: 0},
                     totalSons: 0,
                 },
@@ -118,7 +131,6 @@ router.post("/calculateData", asyncHandler(
         });
     }   
 ))
-
 
 
 export default router
