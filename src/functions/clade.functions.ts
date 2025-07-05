@@ -47,6 +47,7 @@ export function CalculateCladeDynamicData(pAllClades: Clade[]) : Clade[]{
 
     getTotalSonsAndTierOfClades(rootCladeId)
     sortedClades = orderCladesAndChildren(rootCladeId)
+
     calculateCoordinates()
 
     return sortedClades
@@ -117,8 +118,7 @@ function orderCladesAndChildren(cladeId: string, sortedClades: Clade[] = []) : C
 
     // Setting to true the children caldes that got more sons, if they have siblings
     if (clade.directSons!.length > 1) {
-        allClades.find(c => c.id == clade.directSons!.at(-1))!.drawHelper!.arcOrientation = false;
-
+        allClades.find(c => c.id == clade.directSons!.at(-1))!.drawHelper!.arcOrientation = true;
     }
 
     clade.directSons?.forEach(son => {
@@ -193,12 +193,10 @@ function getCoordinatesOfClade(cladeId: string, cladeWidth: number) {
 
 
                 var coordinates = getCardinalFromPolarCoordinates(sonClade.drawHelper!.coords)
-
                 middlePointX = middlePointX + coordinates.x
                 middlePointY = middlePointY + coordinates.y
 
             })
-
 
             middlePointX = middlePointX / 2
             middlePointY = middlePointY / 2

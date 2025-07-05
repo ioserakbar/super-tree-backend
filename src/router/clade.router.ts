@@ -32,6 +32,7 @@ router.get("/", asyncHandler(
     }
 ))
 
+
 router.get("/search/:searchTerm", asyncHandler(
     async (req, res) => {
 
@@ -44,34 +45,62 @@ router.get("/search/:searchTerm", asyncHandler(
 
 router.post("/addClade", asyncHandler(
     async (req, res) => {
-        const{ name, parentClade, description, tier, isFirst} = req.body
+        const{ name, parentCladeId, description, tier, isFirst, directSons, mergeMethod} = req.body
 
+        // Add the new clad
         const clade = await CladeModel.find({name})
-        
         if(clade.length > 0){
             res.status(HTTP_BAD_REQUEST)
             .send("Clade already in database")
             return
         }
+        console.log("adding clade")
+        console.log(req.body)
+
+        var newCladeDirectSons: string[] = []
+
+        if(mergeMethod != "sibling"){
+            newCladeDirectSons = [ ...directSons]
+
+        }
 
         const newCladeInfo: Clade ={
             id:'',
             name, 
-            parentClade, 
+            parentClade: parentCladeId, 
             description, 
             tier, 
-            isFirst
+            isFirst,
+            directSons: newCladeDirectSons
         }
-
+        
         const newClade = await CladeModel.create(newCladeInfo);
 
+        //We find the parent
+        const parentClade = await CladeModel.findOne({_id: parentCladeId})
 
-        //We add it to the directSons array of the parent
-        const parentCladeObject = await CladeModel.findOne({name: parentClade})
+        //We add it to the directSons array of the parent & delete the son of the new clade from the direct sons of the parent
+        const newCladeId =  newClade.id;
 
-        parentCladeObject?.directSons?.push(newClade.id)
+        if(mergeMethod == "both"){
 
-        await parentCladeObject?.save()
+            parentClade!.directSons = [newCladeId]
+
+        }
+        else if(mergeMethod == "sibling"){
+            
+            parentClade!.directSons!.push(newCladeId)
+
+        }
+        else if(mergeMethod == "parent"){
+            
+            // We take the new clade children from the parent, and add the new clade as a new child of the clade parent
+            parentClade!.directSons!.splice(parentClade!.directSons!.indexOf(newClade.directSons![0]), 1)
+            parentClade!.directSons!.push(newCladeId)
+        }
+
+        await parentClade?.save()
+
         res.send("Clade added to database")
     }
 ))
@@ -88,7 +117,7 @@ router.post("/clearData", asyncHandler(
         const resetedData =  {
             $set: {
                 drawHelper:{
-                    arcOrientation: true,
+                    arcOrientation: false,
                     coords: {angle: 0, distance: 0},
                     totalSons: 0,
                 },
@@ -116,7 +145,8 @@ router.post("/calculateData", asyncHandler(
             return {
                 name: clade.name, 
                 drawHelper: clade.drawHelper, 
-                tier: clade.tier
+                tier: clade.tier,
+                directSons: clade.directSons
             }
         }))
 
