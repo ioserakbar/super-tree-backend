@@ -117,7 +117,7 @@ router.post("/clearData", asyncHandler(
         const resetedData =  {
             $set: {
                 drawHelper:{
-                    arcOrientation: false,
+                    arcOrientation: true,
                     coords: {angle: 0, distance: 0},
                     totalSons: 0,
                 },
